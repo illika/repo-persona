@@ -24,3 +24,7 @@ Route::post("/persona", "PersonaController@store")->name("persona.store");
 Route::get("/persona/{persona}", "PersonaController@edit")->name("persona.edit");
 Route::patch("/persona/{persona}", "PersonaController@update")->name("persona.update");
 Route::delete("/persona/{persona}", "PersonaController@destroy")->name("persona.destroy");
+
+Route::get("/sede/departamento", "SedeController@getDepartamento")->name("sede.getdepartamento");
+Route::get("/sede/departamento/{id}/provincia", "SedeController@getProvincia")->name("sede.getprovincia");
+Route::get("/sede/departamento/{id}/distrito", "SedeController@getDistrito")->name("sede.getdistrito");

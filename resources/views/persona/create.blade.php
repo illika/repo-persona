@@ -51,6 +51,15 @@
                         <span class="text-danger" id="msg-fecha">Fecha incorrecta, formato dd/mm/aaaa</span>
                     </div>
                     <div class="form-group">
+                        <label for="departamento">Departamento</label>
+                        <select name="departamento" id="departamento" class="form-control">
+                        </select>
+                        <label for="provincia">Provincia</label>
+                        <select name="provincia" id="provincia" class="form-control">
+                        </select>
+                        <label for="distrito">Distrito</label>
+                        <select name="distrito" id="distrito" class="form-control">
+                        </select>
                         <label for="direccion">Dirección</label>
                         <input type="text" name="direccion" id="direccion" class="form-control" value="{{old("direccion")}}">
                         @error('direccion')
@@ -70,6 +79,83 @@
             $("#fecha_nacimiento").datepicker({
                 dateFormat: 'dd/mm/yy'
             });
+
+            function getDepartamento() {
+                var optDepartamento = "";
+                $.ajax({
+                    type:"Get",
+                    url: "{{route('sede.getdepartamento')}}",
+                    success: function(data) {
+                        var departamentos = JSON.parse(data);
+                        optDepartamento += "<option value='-'>Seleccione departamento</option>";
+                        for(let departamento of departamentos) {
+                            optDepartamento += `<option value='${departamento["id"]}'>${departamento["nombre"]}</option>`;
+                        }
+                        $("#departamento").append(optDepartamento);
+                    }
+                });
+            };
+            getDepartamento();
+
+            $("#departamento").on("change", function() {
+                var id = $(this).val();
+                $("#provincia").empty();
+                getProvincia(id)
+            });
+
+            function getProvincia(id) {
+                var optProvincia = "";
+
+                url = "{{route('sede.getprovincia',':id')}}"
+                url = url.replace(':id', id);
+
+                $.ajax({
+                    type:"Get",
+                    url: url,
+                    success: function(data) {
+                        var provincias = JSON.parse(data);
+                        if (provincias.length > 0) {
+                            optProvincia += "<option value='-'>Seleccione provincia</option>";
+                            for(let provincia of provincias) {
+                                optProvincia += `<option value='${provincia["id"]}'>${provincia["nombre"]}</option>`;
+                            }
+                            $("#provincia").append(optProvincia);
+                        } else {
+                            $("#provincia").empty();
+                        }
+                    }
+                });
+            };
+
+            $("#provincia").on("change", function() {
+                var id = $(this).val();
+                $("#distrito").empty();
+                getDistrito(id)
+            });
+
+            function getDistrito(id) {
+                var optDistrito = "";
+
+                url = "{{route('sede.getdistrito',':id')}}"
+                url = url.replace(':id', id);
+
+                $.ajax({
+                    type:"Get",
+                    url: url,
+                    success: function(data) {
+                        var distritos = JSON.parse(data);
+                        if (distritos.length > 0) {
+                            optDistrito += "<option value='-'>Seleccione distrito</option>";
+                            for(let distrito of distritos) {
+                                optDistrito += `<option value='${distrito["id"]}'>${distrito["nombre"]}</option>`;
+                            }
+                            $("#distrito").append(optDistrito);
+                        } else {
+                            $("#distrito").empty();
+                        }
+                    }
+                });
+            };
 
             function msg() {
                 $("#msg-nombres").hide();
