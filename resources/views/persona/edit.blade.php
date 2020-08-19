@@ -44,7 +44,7 @@
                     </div>           
                     <div class="form-group">
                         <label for="fecha_nacimiento">Fecha nacimiento</label>
-                        <input type="text" name="fecha_nacimiento" id="fecha_nacimiento" class="form-control" value="{{old("fecha_nacimiento", Date("d/m/Y",strtotime($persona->fecha_nacimiento)))}}">
+                        <input type="text" name="fecha_nacimiento" id="fecha_nacimiento" class="form-control" value="{{old("fecha_nacimiento", $persona->fecha_nacimiento ? Date("d/m/Y",strtotime($persona->fecha_nacimiento)) : "")}}">
                         @error('fecha_nacimiento')
                             <span class="text-danger">{{ $errors->first("fecha_nacimiento") }}</span>
                         @enderror
