@@ -2,6 +2,9 @@
 
 @section('contenido')
     <div class="mt-4">
+        @if (session("msg"))
+            <div class="alert alert-danger">{{session("msg")}}</div>
+            @endif
         <h2>Crear Persona</h2>
         <div class="row col-12">
             <a href="{{route("persona.index")}}" class="btn btn-primary"> Regresar</a>

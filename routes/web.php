@@ -20,7 +20,7 @@ Route::get('/', function () {
 
 Route::get("/persona", "PersonaController@index")->name("persona.index");
 Route::get("/persona/crear", "PersonaController@create")->name("persona.create");
-Route::post("/persona", "PersonaController@store")->name("persona.store");
+Route::post("/persona", "PersonaController@store")->middleware("verificar.edad")->name("persona.store");
 Route::get("/persona/{persona}", "PersonaController@edit")->name("persona.edit");
 Route::patch("/persona/{persona}", "PersonaController@update")->name("persona.update");
 Route::delete("/persona/{persona}", "PersonaController@destroy")->name("persona.destroy");
