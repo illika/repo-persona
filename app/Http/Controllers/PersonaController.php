@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Persona;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Validation\Rule;
 
 class PersonaController extends Controller
@@ -47,6 +48,15 @@ class PersonaController extends Controller
             "direccion" => ["required","max:150","regex:/^[0-9a-zA-Z\s]*$/"]
         ]);
         $persona['fecha_nacimiento'] = $request->fecha_nacimiento ? Carbon::createFromFormat('d/m/Y', $request->fecha_nacimiento)->format('Y-m-d') : null;
+
+        $correo = $persona["correo"];
+        $nombres = $persona["nombres"];
+
+        $data = array('nombre'=>$nombres, "cuerpo" => "Se aca de registrar correctamente");
+        Mail::send("persona.mail", $data, function($message) use($correo) {
+            $message->to($correo)->subject('Resgitrado en el formulario');
+        });
+
         Persona::create($persona);
 
         return redirect()->route("persona.index")->with("persona-sucess","Se guardo correctamente");
