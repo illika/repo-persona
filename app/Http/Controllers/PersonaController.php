@@ -46,7 +46,7 @@ class PersonaController extends Controller
             "fecha_nacimiento" => "nullable|date_format:d/m/Y",
             "direccion" => ["required","max:150","regex:/^[0-9a-zA-Z\s]*$/"]
         ]);
-        $persona['fecha_nacimiento'] = Carbon::createFromFormat('d/m/Y', $request->fecha_nacimiento)->format('Y-m-d');
+        $persona['fecha_nacimiento'] = $request->fecha_nacimiento ? Carbon::createFromFormat('d/m/Y', $request->fecha_nacimiento)->format('Y-m-d') : null;
         Persona::create($persona);
 
         return redirect()->route("persona.index")->with("persona-sucess","Se guardo correctamente");
@@ -91,7 +91,7 @@ class PersonaController extends Controller
             "fecha_nacimiento" => "nullable|date_format:d/m/Y",
             "direccion" => ["required","max:150","regex:/^[0-9a-zA-Z\s]*$/"]
         ]);
-        $updPersona['fecha_nacimiento'] = Carbon::createFromFormat('d/m/Y', $request->fecha_nacimiento)->format('Y-m-d');
+        $updPersona['fecha_nacimiento'] = $request->fecha_nacimiento ? Carbon::createFromFormat('d/m/Y', $request->fecha_nacimiento)->format('Y-m-d') : null;
         $persona->update($updPersona);
         return redirect()->route("persona.index")->with("persona-sucess","Se actualizó correctamente");
     }
