@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Persona;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 
@@ -42,10 +43,10 @@ class PersonaController extends Controller
             "tipo_documento" => ["required", Rule::in(["DNI","carné de extranjería"])],
             "numero_documento" => "required|alpha_num|min:8|max:15",
             "correo" => "required|email|max:50",
-            "fecha_nacimiento" => "nullable|date",
+            "fecha_nacimiento" => "nullable|date_format:d/m/Y",
             "direccion" => ["required","max:150","regex:/^[0-9a-zA-Z\s]*$/"]
         ]);
-        
+        $persona['fecha_nacimiento'] = Carbon::createFromFormat('d/m/Y', $request->fecha_nacimiento)->format('Y-m-d');
         Persona::create($persona);
 
         return redirect()->route("persona.index")->with("persona-sucess","Se guardo correctamente");
@@ -87,10 +88,10 @@ class PersonaController extends Controller
             "tipo_documento" => ["required", Rule::in(["DNI","carné de extranjería"])],
             "numero_documento" => "required|alpha_num|min:8|max:15",
             "correo" => "required|email|max:50",
-            "fecha_nacimiento" => "nullable|date",
+            "fecha_nacimiento" => "nullable|date_format:d/m/Y",
             "direccion" => ["required","max:150","regex:/^[0-9a-zA-Z\s]*$/"]
         ]);
-        
+        $updPersona['fecha_nacimiento'] = Carbon::createFromFormat('d/m/Y', $request->fecha_nacimiento)->format('Y-m-d');
         $persona->update($updPersona);
         return redirect()->route("persona.index")->with("persona-sucess","Se actualizó correctamente");
     }
